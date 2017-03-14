@@ -43,6 +43,13 @@ start_server() {
                            -X database.port=$DB_PORT \
                            -X database.database=$DB_NAME \
                            -X digdag.secret-encryption-key=$DIGDAG_ENCRYPTION_KEY
+    elif [[ -n $DB_DIR ]]; then
+        digdag server  $* --bind 0.0.0.0 \
+                       --port 65432 \
+                       --admin-bind 0.0.0.0 \
+                       --admin-port 65433 \
+                       --config $CONFIG_FILE \
+                       --database $DB_DIR
     else
         digdag server  $* --bind 0.0.0.0 \
                        --port 65432 \
