@@ -48,6 +48,11 @@ RUN set -x \
 # see CA_CERTIFICATES_JAVA_VERSION notes above
 RUN /var/lib/dpkg/info/ca-certificates-java.postinst configure
 
+RUN set -x \
+	&& apt-get update \
+	&& apt-get install -yqq docker.io \
+	&& rm -rf /var/lib/apt/lists/*
+
 # If you're reading this and have any feedback on how this image could be
 #   improved, please open an issue or a pull request so we can discuss it!
 
@@ -72,12 +77,7 @@ RUN curl  -o /usr/bin/embulk --create-dirs -L "$EMBULK_DOWNLOAD_SERVER/embulk-$E
 
 RUN chmod +x /home/digdag/run-digdag.sh
 
-RUN useradd -d /home/digdag -s /sbin/nologin -U digdag && \
-    chown digdag /home/digdag
-
 WORKDIR /home/digdag
-
-USER digdag
 
 # Install as the digdag user
 RUN embulk gem install -g /home/digdag/GemFile
